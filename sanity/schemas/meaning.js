@@ -7,8 +7,7 @@ export default {
   fields: [{
     title: "Signifier",
     name: "signifier",
-    type: "reference",
-    to: [{type: "signifier"}],
+    type: "string",
     validation: Rule => Rule.required()
   }, {
     title: "Signified",
@@ -21,12 +20,7 @@ export default {
     name: 'countries',
     type: 'array',
     of: [{
-      type: 'string',
-      options: {
-        list: [
-          ...countries
-        ],
-      }
+      type: 'country_locale'
     }]
   }]
 }

@@ -1,5 +1,3 @@
-import countries from './countries'
-
 export default {
   title: "Meaning",
   name: "meaning",

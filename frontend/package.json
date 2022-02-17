@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@sanity/client": "^3.0.6",
+    "groq": "^2.15.0",
+    "next": "latest",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  }
+}

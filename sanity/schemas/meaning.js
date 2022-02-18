@@ -20,5 +20,14 @@ export default {
     of: [{
       type: 'country_locale'
     }]
+  }, {
+    title: 'Examples',
+    name: 'examples',
+    type: 'array',
+    of: [
+      {
+        type: 'block'
+      }
+    ]
   }]
 }

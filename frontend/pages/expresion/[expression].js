@@ -134,7 +134,7 @@ const SlangData = ({slangMeaning, fullUrl}) => {
                   <div tw="p-3 border-t flex flex-wrap bg-gray-50">
                     <div tw="flex-grow w-full mb-2">Otros usos</div>
                     {meaning.related.map(word => (
-                      <Link key={ word._id } href={`/expresion/${ word.signifier.trim() }`}>
+                      <Link key={ word._id } href={`/expresion/${ word.signifier.trim() }`} passHref={true}>
                         <a tw="rounded text-center border bg-white p-3 flex-grow flex-shrink-0 flex gap-2 items-center justify-center cursor-pointer transition-colors hover:border-gray-300 active:bg-gray-100 active:border-blue-300" css={css`flex-basis: 0`}>
                           <div tw="font-bold text-lg">{ word.signifier }</div>
                           {word.countries.map(country => (

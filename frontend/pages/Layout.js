@@ -1,9 +1,13 @@
 import tw from 'twin.macro'
 import { css, jsx } from '@emotion/react'
+import Head from 'next/head';
 
 export default (props) => {
   return (
     <>
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <header tw="bg-gray-100">
         <div tw="max-w-screen-lg mx-auto px-4 py-6">
           Aqui Decimos

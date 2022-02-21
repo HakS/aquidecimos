@@ -59,8 +59,8 @@ const SlangData = ({slangMeaning, fullUrl}) => {
     }
   `
 
-  const tagTitle = slangMeaning.length > 0 ? `"${router.query.expression}" significa...` : null
-  const tagDescription = slangMeaning.length > 0 ?
+  const tagTitle = slangMeaning != undefined && slangMeaning.length > 0 ? `"${router.query.expression}" significa...` : null
+  const tagDescription = slangMeaning != undefined && slangMeaning.length > 0 ?
     `${slangMeaning.map(meaning => `${meaning.meaning}: ${truncate(removeLastDot(meaning.definition), 90)}`).join(', ')}` : null
 
   return (
@@ -122,7 +122,7 @@ const SlangData = ({slangMeaning, fullUrl}) => {
                     <PortableText content={meaning.examples}/>
                   </div>
                 )}
-                {meaning.related.length > 0 && (
+                {meaning.related != undefined && meaning.related.length > 0 && (
                   <div tw="p-3 border-t flex flex-wrap bg-gray-50">
                     <div tw="flex-grow w-full mb-2">Otros usos</div>
                     {meaning.related.map(word => (

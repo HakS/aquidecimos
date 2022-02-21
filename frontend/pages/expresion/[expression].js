@@ -63,6 +63,11 @@ const SlangData = ({slangMeaning, fullUrl}) => {
   const tagDescription = slangMeaning != undefined && slangMeaning.length > 0 ?
     `${slangMeaning.map(meaning => `${meaning.meaning}: ${truncate(removeLastDot(meaning.definition), 90)}`).join(', ')}` : null
 
+  let absUrl = '';
+  if (typeof window !== "undefined") {
+    absUrl = window.location.protocol + "//" + window.location.host  + window.location.pathname
+  }
+
   return (
     <>
       <Head>
@@ -83,7 +88,7 @@ const SlangData = ({slangMeaning, fullUrl}) => {
             <div tw="flex justify-between">
               <h1 tw="font-bold text-xl">"{ router.query.expression }" significa</h1>
               <div>
-                <FacebookShareButton>
+                <FacebookShareButton url={absUrl}>
                   <FacebookIcon size={24} round={false}></FacebookIcon>
                 </FacebookShareButton>
               </div>

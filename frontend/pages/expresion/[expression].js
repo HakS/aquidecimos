@@ -81,6 +81,7 @@ const SlangData = ({slangMeaning, fullUrl}) => {
         <meta name="og:url" content={useRouter().asPath} />
         <meta name="twitter:title" content={tagTitle} />
         <meta name="twitter:description" content={tagDescription} />
+        <link rel="canonical" href={absUrl} />
       </Head>
       <Layout>
         {slangMeaning && slangMeaning.length > 0 ? (

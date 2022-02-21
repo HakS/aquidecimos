@@ -6,6 +6,9 @@ import { css, jsx } from '@emotion/react'
 import ReactCountryFlag from 'react-country-flag'
 import spanishCountryLabels from '../../spanishCountryLabels'
 import wordTypes from '../../wordTypes'
+import PortableText from 'react-portable-text'
+import Link from 'next/link'
+import Layout from '../Layout'
 
 const SlangData = ({slangMeaning}) => {
   const router = useRouter()
@@ -46,25 +49,32 @@ const SlangData = ({slangMeaning}) => {
     }
   `
 
+  const portableTextStyles = css`
+    ul {
+      list-style: disc;
+      margin-left: 1.4rem;
+    }
+  `;
+
   return (
-    <div tw="max-w-screen-lg mx-auto">
+    <Layout>
       {slangMeaning && slangMeaning.length > 0 ? (
-        <div tw="flex flex-col gap-4 m-4">
+        <div tw="flex flex-col gap-4">
           <h1 tw="font-bold text-xl">"{ router.query.expression }" significa</h1>
           {slangMeaning.map(meaning => (
-            <div key={meaning._id} tw="border bg-white shadow-lg">
+            <article key={meaning._id} tw="border bg-white shadow-lg">
               <div tw="p-3">
-                <div tw="flex justify-between mb-2">
+                <div tw="flex justify-between mb-2 flex-wrap">
                   <div tw="flex gap-2 items-center">
                     <h2 tw="font-semibold text-xl mb-0">{ meaning.meaning }</h2>
                     <div tw="bg-blue-700 text-sm text-white px-2 rounded-xl">{ wordTypes[meaning.type] }</div>
                   </div>
-                  <div tw="flex gap-4">
+                  <div tw="flex gap-4 w-full sm:w-auto">
                     {meaning.countries.map(country => (
                       <div
                       tip={`${spanishCountryLabels[country.country]}${country.locality ? ` (${country.locality})` : ''}`}
                       key={country.country}
-                      tw="text-center flex-grow flex-shrink-0"
+                      tw="text-center sm:flex-grow sm:flex-shrink-0"
                       css={tooltip}>
                         <ReactCountryFlag countryCode={country.country}
                         svg
@@ -79,28 +89,36 @@ const SlangData = ({slangMeaning}) => {
                 </div>
                 <div tw="mb-3">{ meaning.definition }</div>
               </div>
+              {(meaning.examples != undefined && meaning.examples.length > 0) && (
+                <div css={portableTextStyles} tw="p-3 border-t">
+                  <div>Ejemplos: </div>
+                  <PortableText content={meaning.examples}/>
+                </div>
+              )}
               {meaning.related.length > 0 && (
-                <div tw="p-3 border-t flex flex-wrap bg-gray-100">
+                <div tw="p-3 border-t flex flex-wrap bg-gray-50">
                   <div tw="flex-grow w-full mb-2">Otros usos</div>
                   {meaning.related.map(word => (
-                    <div key={ word._id } tw="rounded text-center border bg-white p-3 flex-grow flex-shrink-0 flex gap-2 items-center justify-center" css={css`flex-basis: 0`}>
-                      <div tw="font-bold text-lg">{ word.signifier }</div>
-                      {word.countries.map(country => (
-                        <div css={tooltip} tip={spanishCountryLabels[country.country]}>
-                          <ReactCountryFlag countryCode={country.country}
-                            svg
-                            aria-label={spanishCountryLabels[country.country]}
-                            style={{
-                              width: '1.3em',
-                              height: '1.3em',
-                            }} />
-                        </div>
-                      ))}
-                    </div>
+                    <Link href={`/expresion/${ word.signifier.trim() }`}>
+                      <a key={ word._id } tw="rounded text-center border bg-white p-3 flex-grow flex-shrink-0 flex gap-2 items-center justify-center cursor-pointer hover:border-gray-300 active:bg-gray-100 active:border-blue-300" css={css`flex-basis: 0`}>
+                        <div tw="font-bold text-lg">{ word.signifier }</div>
+                        {word.countries.map(country => (
+                          <div key={country.country} css={tooltip} tip={spanishCountryLabels[country.country]}>
+                            <ReactCountryFlag countryCode={country.country}
+                              svg
+                              aria-label={spanishCountryLabels[country.country]}
+                              style={{
+                                width: '1.3em',
+                                height: '1.3em',
+                              }} />
+                          </div>
+                        ))}
+                      </a>
+                    </Link>
                   ))}
                 </div>
               )}
-            </div>
+            </article>
           ))}
         </div>
       ) : (
@@ -109,7 +127,7 @@ const SlangData = ({slangMeaning}) => {
           <div>¿Quieres definir una palabra?</div>
         </>
       )}
-    </div>
+    </Layout>
   )
 }
 
@@ -137,6 +155,7 @@ export async function getStaticProps(context) {
       "meaning": signified->signifier,
       "definition": signified->definition,
       "type": signified->type,
+      examples,
       countries[] {country, locality},
       "related": *[
         _type == "meaning" &&

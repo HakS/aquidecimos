@@ -115,6 +115,7 @@ const SlangData = ({slangMeaning, fullUrl}) => {
                           <ReactCountryFlag countryCode={country.country}
                           svg
                           aria-label={spanishCountryLabels[country.country]}
+                          alt={spanishCountryLabels[country.country]}
                           style={{
                             width: '1.4em',
                             height: '1.4em',
@@ -143,6 +144,7 @@ const SlangData = ({slangMeaning, fullUrl}) => {
                               <ReactCountryFlag countryCode={country.country}
                                 svg
                                 aria-label={spanishCountryLabels[country.country]}
+                                alt={spanishCountryLabels[country.country]}
                                 style={{
                                   width: '1.3em',
                                   height: '1.3em',

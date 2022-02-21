@@ -4,7 +4,7 @@ import { css, jsx } from '@emotion/react'
 export default (props) => {
   return (
     <>
-      <header tw="bg-gray-100">
+      <header tw="bg-gray-400">
         <div tw="max-w-screen-lg mx-auto px-4 py-6">
           Aqui Decimos
         </div>

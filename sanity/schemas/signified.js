@@ -23,6 +23,7 @@ export default {
         {title: 'Adverbio', value: 'adverbio'},
         {title: 'Verbo', value: 'verb'},
         {title: 'Acción', value: 'action'},
+        {title: 'Interjección', value: 'interjection'},
       ],
     },
   }, {

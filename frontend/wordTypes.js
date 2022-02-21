@@ -4,4 +4,6 @@ export default {
   adverbio: 'Adverbio',
   verb: 'Verbo',
   action: 'Acción',
+  expression: 'Expresión',
+  interjection: 'Interjección',
 }

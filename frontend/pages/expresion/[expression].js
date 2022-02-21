@@ -11,7 +11,7 @@ import Link from 'next/link'
 import Layout from '../Layout'
 import Head from 'next/head';
 import { removeLastDot, truncate, getAbsoluteUrl } from '../../utils';
-import { FacebookIcon, FacebookShareButton } from 'react-share'
+import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } from 'react-share'
 import absoluteUrl from 'next-absolute-url'
 
 const SlangData = ({slangMeaning, fullUrl}) => {
@@ -87,10 +87,13 @@ const SlangData = ({slangMeaning, fullUrl}) => {
           <div tw="flex flex-col gap-4">
             <div tw="flex justify-between">
               <h1 tw="font-bold text-xl">"{ router.query.expression }" significa</h1>
-              <div>
+              <div tw="flex gap-3">
                 <FacebookShareButton url={absUrl}>
-                  <FacebookIcon size={24} round={false}></FacebookIcon>
+                  <FacebookIcon size={24} round={true}></FacebookIcon>
                 </FacebookShareButton>
+                <TwitterShareButton url={absUrl}>
+                  <TwitterIcon size={24} round={true}></TwitterIcon>
+                </TwitterShareButton>
               </div>
             </div>
             {slangMeaning.map(meaning => (

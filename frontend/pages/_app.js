@@ -1,8 +1,7 @@
-import { GlobalStyles } from 'twin.macro'
+import '../styles/global.css'
 
 function MyApp({ Component, pageProps }) {
   return <>
-    <GlobalStyles />
     <Component {...pageProps} />
   </>
 }

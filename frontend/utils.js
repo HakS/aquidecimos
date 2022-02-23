@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 export const truncate = (input, limit) => input.length > limit ? `${input.substring(0, limit)}...` : input;
 
 export const removeLastDot = (str) => {
@@ -7,11 +9,37 @@ export const removeLastDot = (str) => {
   return str;
 }
 
-export const getAbsoluteUrl = (function() {
-	var a;
-	return function(url) {
-		if(!a) a = document.createElement('a');
-		a.href = url;
-		return a.href;
-	};
-})();
+export const Tooltip = styled.div`
+  position:relative;
+  &:after{
+    content: attr(data-tip);
+    font-size: .8rem;
+    color: #fff;
+    padding:5px 10px;
+    border-radius: 6px;
+    background: #565656;
+    box-shadow: 0px 3px 4px rgba(0,0,0, .35);
+    position: absolute;
+    top: 27px;
+    left: -10px;
+    display:none;
+  }
+  &:before{
+    z-index:1000;
+    position:absolute;
+    content:"";
+    top:15px;
+    left:0px;
+    border-right:7px transparent solid;
+    border-left:7px transparent solid;
+    display:none;
+  }
+  &:hover{
+    z-index:1000;
+    position:relative;
+    color:#8325f7;
+    &:after{
+      display: inline;
+    }
+  }
+`

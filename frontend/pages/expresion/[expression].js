@@ -18,6 +18,15 @@ const PortableTextStyles = styled.div`
   }
 `
 
+const RelatedLink = styled.a`
+  gap: 0.7rem;
+  flex-basis: 100%;
+  @media (min-width: 1024px) {
+    min-width: calc(50% - 0.75rem);
+    flex-basis: calc(50% - 0.75rem);
+  }
+`
+
 const SlangData = ({slangMeaning}) => {
   const router = useRouter()
 
@@ -82,14 +91,16 @@ const SlangData = ({slangMeaning}) => {
                 {meaning.related != undefined && meaning.related.length > 0 && (
                   <div className="p-3 border-t flex flex-wrap bg-gray-50">
                     <div className="flex-grow w-full mb-2">Otros usos</div>
-                    {meaning.related.map(word => (
-                      <Link key={ word._id } href={`/expresion/${ word.signifier.trim() }`} passHref={true}>
-                      <a className="rounded text-center border bg-white p-3 flex-grow flex-shrink-0 flex gap-2 items-center justify-center cursor-pointer transition-colors hover:border-gray-300 active:bg-gray-100 active:border-blue-300 basis-0">
-                          <div className="font-bold text-lg">{ word.signifier }</div>
-                          <Flags countries={word.countries} />
-                        </a>
-                      </Link>
-                    ))}
+                    <div className="flex flex-wrap gap-3">
+                      {meaning.related.map(word => (
+                        <Link key={ word._id } href={`/expresion/${ word.signifier.trim() }`} passHref={true}>
+                          <RelatedLink className="rounded text-center border bg-white p-3 flex-grow flex-shrink-0 flex gap-2 items-center justify-center cursor-pointer transition-colors hover:border-gray-300 active:bg-gray-100 active:border-blue-300 basis-0">
+                            <div className="font-bold text-lg">{ word.signifier }</div>
+                            <Flags countries={word.countries} />
+                          </RelatedLink>
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 )}
               </article>

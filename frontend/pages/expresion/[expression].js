@@ -5,7 +5,7 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import PortableText from 'react-portable-text'
 import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } from 'react-share'
-import client from '../../client'
+import { backendCDN } from '../../client'
 import wordTypes from '../../wordTypes'
 import Layout from '../Layout'
 import { removeLastDot, truncate } from '../../utils';
@@ -118,7 +118,7 @@ const SlangData = ({slangMeaning}) => {
 }
 
 export async function getStaticPaths() {
-  const paths = await client.fetch(
+  const paths = await backendCDN.fetch(
     `*[_type == "meaning"][].signifier`
   )
 
@@ -133,7 +133,7 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   const { params } = context;
   const { expression = "" } = params
-  const slangMeaning = await client.fetch(groq`
+  const slangMeaning = await backendCDN.fetch(groq`
     *[
       _type == "meaning" &&
       signifier match $slang

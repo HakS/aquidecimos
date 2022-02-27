@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Search from '../components/search';
 
 export default (props) => {
   return (
@@ -9,6 +10,9 @@ export default (props) => {
       <header className="bg-gray-100">
         <div className="max-w-screen-lg mx-auto px-4 py-6">
           Aqui Decimos
+          <div className="flex w-full">
+            <Search />
+          </div>
         </div>
       </header>
       <div className="max-w-screen-lg mx-auto flex flex-wrap px-4 my-10">

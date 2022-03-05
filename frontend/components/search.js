@@ -1,13 +1,21 @@
 import groq from 'groq';
 import Link from 'next/link';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 import { backendCDN } from '../client';
+import { useRouter } from 'next/router';
 
 const Search = () => {
   const searchRef = useRef(null)
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(false)
   const [results, setResults] = useState([])
+  const router = useRouter()
+
+  useEffect(() => {
+    if (active) {
+      setActive(false)
+    }
+  }, [router.asPath])
 
   const fetchResults = async query => {
     const result = await backendCDN.fetch(

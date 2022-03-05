@@ -11,7 +11,7 @@ export default (props) => {
       <header className="bg-gray-100">
         <div className="max-w-screen-lg mx-auto px-4 py-6">
           <Link href="/" passHref={true}>
-            <a>Aqui Decimos</a>
+            <a className="mb-3 inline-block">Aqui Decimos</a>
           </Link>
           <div className="flex w-full">
             <Search />
@@ -22,13 +22,12 @@ export default (props) => {
         <main className="w-full md:w-8/12 md:pr-4">
           { props.children }
         </main>
-        <aside className="w-full md:w-4/12">
-          test
+        <aside className="w-full md:w-4/12 text-slate-400 text-sm text-center">
+          Aqui Decimos, { new Date().getFullYear() } todos los derechos reservados.
         </aside>
       </div>
-      <footer className="max-w-screen-lg mx-auto px-4">
-        Aqui Decimos, { new Date().getFullYear() } todos los derechos reservados.
-      </footer>
+      {/* <footer className="max-w-screen-lg mx-auto px-4 py-5">
+      </footer> */}
     </>
   )
 }

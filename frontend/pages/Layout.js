@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Search from '../components/search';
+import Link from 'next/link';
 
 export default (props) => {
   return (
@@ -9,7 +10,9 @@ export default (props) => {
       </Head>
       <header className="bg-gray-100">
         <div className="max-w-screen-lg mx-auto px-4 py-6">
-          Aqui Decimos
+          <Link href="/" passHref={true}>
+            <a>Aqui Decimos</a>
+          </Link>
           <div className="flex w-full">
             <Search />
           </div>

@@ -1,7 +1,7 @@
 import groq from 'groq';
 import Link from 'next/link';
 import { useCallback, useRef, useState } from 'react';
-import { backend } from '../client';
+import { backendCDN } from '../client';
 
 const Search = () => {
   const searchRef = useRef(null)
@@ -10,31 +10,18 @@ const Search = () => {
   const [results, setResults] = useState([])
 
   const fetchResults = async query => {
-    const result = await backend.fetch(
-      groq`*[
-        _type == "meaning" && (
-          signifier match $query ||
-          signified._ref in *[
-            _type == "signified" &&
-            signifier match $query
-          ]._id
-        )
-      ] {
-        "expression": select(
-          signifier match $query => "slang:" + signifier,
-          signified._ref in *[
-            _type == "signified" &&
-            signifier match $query
-          ]._id => "meaning:" + signified->signifier
-        )
-      }[].expression`
-    , { query: `${query}*` })
+    const result = await backendCDN.fetch(
+      groq`*[_type in ["meaning", "signified"] && signifier match $query] {
+        signifier,
+        _type
+      }`,
+      { query: `${query}*` }
+    )
 
-    setResults(result.map(item => {
-      const [type, word] = item.split(':');
+    setResults(result.map(({_type, signifier}) => {
       return {
-        word: word,
-        link: type == 'slang' ? `/expresion/${ word }` : `/concepto/${ word }`
+        word: signifier,
+        link: `/${ _type == 'meaning' ? 'expresion' : 'concepto' }/${ signifier }`
       }
     }))
   }
@@ -54,9 +41,11 @@ const Search = () => {
     window.addEventListener('click', onClick)
   }, [])
 
-  const onClick = useCallback(() => {
-    setActive(false)
-    window.removeEventListener('click', onClick)
+  const onClick = useCallback(event => {
+    if (searchRef.current && !searchRef.current.contains(event.target)) {
+      setActive(false)
+      window.removeEventListener('click', onClick)
+    }
   }, [])
 
   return (
@@ -70,8 +59,8 @@ const Search = () => {
       { active && results.length > 0 && (
         <ul className="absolute top-full w-full bg-white border border-slate-200">
           { results.map(result => (
-            <li>
-              <Link key={ result.word } href={result.link} passHref={true}>
+            <li key={ result.word }>
+              <Link href={result.link} passHref={true}>
                 <a className="p-3 block hover:bg-slate-100">{result.word}</a>
               </Link>
             </li>

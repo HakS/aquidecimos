@@ -15,7 +15,7 @@ const WordConcept = ({wordDef}) => {
   const [absUrl, setAbsUrl] = useState('')
 
   const tagTitle = router.query.expression
-  const tagDescription = wordDef.definition
+  const tagDescription = wordDef != undefined ? wordDef.definition : null
 
   useEffect(() => {
     setAbsUrl(window.location.protocol + "//" + window.location.host  + window.location.pathname)
@@ -36,46 +36,45 @@ const WordConcept = ({wordDef}) => {
         <link rel="canonical" href={absUrl} />
       </Head>
       <Layout>
-        <div className="flex flex-col gap-4">
+        {wordDef && (
+          <div className="flex flex-col gap-4">
 
-          <article className="border bg-white shadow-lg">
-            <div className="p-3">
-              <div className="flex justify-between mb-2 flex-wrap">
-                <div className="flex gap-2 items-center justify-between w-full">
-                  <div className="flex items-center gap-3">
-                    <h1 className="font-bold text-xl mb-0">{ router.query.expression }</h1>
-                    <div className="bg-blue-700 text-sm text-white px-2 rounded-xl">{ wordTypes[wordDef.type] }</div>
-                  </div>
-                  <div className="flex gap-3">
-                    <FacebookShareButton url={absUrl}>
-                      <FacebookIcon size={24} round={true}></FacebookIcon>
-                    </FacebookShareButton>
-                    <TwitterShareButton url={absUrl}>
-                      <TwitterIcon size={24} round={true}></TwitterIcon>
-                    </TwitterShareButton>
+            <article className="border bg-white shadow-lg">
+              <div className="p-3">
+                <div className="flex justify-between mb-2 flex-wrap">
+                  <div className="flex gap-2 items-center justify-between w-full">
+                    <div className="flex items-center gap-3">
+                      <h1 className="font-bold text-xl mb-0">{ router.query.expression }</h1>
+                      <div className="bg-blue-700 text-sm text-white px-2 rounded-xl">{ wordTypes[wordDef.type] }</div>
+                    </div>
+                    <div className="flex gap-3">
+                      <FacebookShareButton url={absUrl}>
+                        <FacebookIcon size={24} round={true}></FacebookIcon>
+                      </FacebookShareButton>
+                      <TwitterShareButton url={absUrl}>
+                        <TwitterIcon size={24} round={true}></TwitterIcon>
+                      </TwitterShareButton>
+                    </div>
                   </div>
                 </div>
-                <div className="flex gap-4 w-full sm:w-auto">
-                  {/* <Flags countries={wordDef.countries} /> */}
+                <div className="mb-3">{ wordDef.definition }</div>
+              </div>
+              <div className="p-3 border-t flex flex-wrap bg-gray-50">
+                <div className="flex flex-wrap gap-3">
+                  {wordDef.slangs.map(slang => (
+                    <Link key={ slang._id } href={`/expresion/${ slang.signifier.trim() }`} passHref={true}>
+                      <RelatedLink className="rounded text-center border bg-white p-3 flex-grow flex-shrink-0 flex gap-2 items-center justify-center cursor-pointer transition-colors hover:border-gray-300 active:bg-gray-100 active:border-blue-300 basis-0">
+                        <div className="font-bold text-lg">{ slang.signifier }</div>
+                        <Flags countries={slang.countries} />
+                      </RelatedLink>
+                    </Link>
+                  ))}
                 </div>
               </div>
-              <div className="mb-3">{ wordDef.definition }</div>
-            </div>
-            <div className="p-3 border-t flex flex-wrap bg-gray-50">
-              <div className="flex flex-wrap gap-3">
-                {wordDef.slangs.map(slang => (
-                  <Link key={ slang._id } href={`/expresion/${ slang.signifier.trim() }`} passHref={true}>
-                    <RelatedLink className="rounded text-center border bg-white p-3 flex-grow flex-shrink-0 flex gap-2 items-center justify-center cursor-pointer transition-colors hover:border-gray-300 active:bg-gray-100 active:border-blue-300 basis-0">
-                      <div className="font-bold text-lg">{ slang.signifier }</div>
-                      <Flags countries={slang.countries} />
-                    </RelatedLink>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </article>
+            </article>
 
-        </div>
+          </div>
+        )}
       </Layout>
     </>
   )

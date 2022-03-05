@@ -1,10 +1,11 @@
 import Head from 'next/head'
 import Layout from './Layout'
-import { backendCDN } from '../client';
-import groq from 'groq';
-import Expression from '../components/expression';
-import ReactPaginate from 'react-paginate';
-import { useState, useEffect } from 'react';
+import { backendCDN } from '../client'
+import groq from 'groq'
+import Expression from '../components/expression'
+import ReactPaginate from 'react-paginate'
+import { useState, useEffect } from 'react'
+import styled from 'styled-components';
 
 const pages = 5;
 
@@ -34,6 +35,29 @@ const getWords = async (offset = 0) => {
   return results
 }
 
+const Pager = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  ul {
+    display: flex;
+  }
+  li {
+    border: 1px solid #e7ebee;
+    + li {
+      border-left: 0;
+    }
+    a {
+      display: block;
+      padding: .6rem .8rem;
+      cursor: pointer;
+      &:hover {
+        background-color: #e7ebee;
+      }
+    }
+  }
+`
+
 const Home = ({lastWords, wordsCount}) => {
   const [words, setWords] = useState(lastWords);
   const [pageCount] = useState(Math.ceil(wordsCount / pages));
@@ -51,7 +75,7 @@ const Home = ({lastWords, wordsCount}) => {
   }, [itemOffset]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [words]);
 
   const handlePageClick = event => {
@@ -71,15 +95,17 @@ const Home = ({lastWords, wordsCount}) => {
             {words.map(meaning => (
               <Expression key={meaning._id} meaning={meaning} />
             ))}
-            <ReactPaginate
-              breakLabel="..."
-              nextLabel="next >"
-              onPageChange={handlePageClick}
-              pageRangeDisplayed={2}
-              pageCount={pageCount}
-              previousLabel="< previous"
-              renderOnZeroPageCount={null}
-            />
+            <Pager>
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel="next >"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={2}
+                pageCount={pageCount}
+                previousLabel="< previous"
+                renderOnZeroPageCount={null}
+              />
+            </Pager>
           </div>
         )}
       </Layout>

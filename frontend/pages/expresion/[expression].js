@@ -8,8 +8,9 @@ import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } fr
 import { backendCDN } from '../../client'
 import wordTypes from '../../wordTypes'
 import Layout from '../Layout'
-import { removeLastDot, truncate } from '../../utils';
+import { RelatedLink, removeLastDot, truncate } from '../../utils';
 import Flags from '../../components/flags';
+import { useEffect, useState } from 'react';
 
 const PortableTextStyles = styled.div`
   ul {
@@ -18,26 +19,17 @@ const PortableTextStyles = styled.div`
   }
 `
 
-const RelatedLink = styled.a`
-  gap: 0.7rem;
-  flex-basis: 100%;
-  @media (min-width: 1024px) {
-    min-width: calc(50% - 0.75rem);
-    flex-basis: calc(50% - 0.75rem);
-  }
-`
-
 const SlangData = ({slangMeaning}) => {
   const router = useRouter()
+  const [absUrl, setAbsUrl] = useState('')
 
   const tagTitle = slangMeaning != undefined && slangMeaning.length > 0 ? `"${router.query.expression}" significa...` : null
   const tagDescription = slangMeaning != undefined && slangMeaning.length > 0 ?
     `${slangMeaning.map(meaning => `${meaning.meaning}: ${truncate(removeLastDot(meaning.definition), 90)}`).join(', ')}` : null
 
-  let absUrl = '';
-  if (typeof window !== "undefined") {
-    absUrl = window.location.protocol + "//" + window.location.host  + window.location.pathname
-  }
+  useEffect(() => {
+    setAbsUrl(window.location.protocol + "//" + window.location.host  + window.location.pathname)
+  })
 
   return (
     <>

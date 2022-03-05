@@ -43,3 +43,11 @@ export const Tooltip = styled.div`
     }
   }
 `
+export const RelatedLink = styled.a`
+  gap: 0.7rem;
+  flex-basis: 100%;
+  @media (min-width: 1024px) {
+    min-width: calc(50% - 0.75rem);
+    flex-basis: calc(50% - 0.75rem);
+  }
+`

@@ -18,12 +18,10 @@ const Search = () => {
       { query: `${query}*` }
     )
 
-    setResults(result.map(({_type, signifier}) => {
-      return {
-        word: signifier,
-        link: `/${ _type == 'meaning' ? 'expresion' : 'concepto' }/${ signifier }`
-      }
-    }))
+    setResults(result.map(({_type, signifier}) => ({
+      word: signifier,
+      link: `/${ _type == 'meaning' ? 'expresion' : 'concepto' }/${ signifier }`
+    })))
   }
 
   const onChange = useCallback(event => {

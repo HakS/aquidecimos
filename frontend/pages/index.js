@@ -3,32 +3,16 @@ import Layout from './Layout'
 import { backendCDN } from '../client';
 import groq from 'groq';
 import Expression from '../components/expression';
+import ReactPaginate from 'react-paginate';
+import { useState, useEffect } from 'react';
 
-const Home = ({lastWords}) => {
-  return (
-    <>
-      <Head>
-        <title>Aqui Decimos</title>
-      </Head>
+const pages = 5;
 
-      <Layout>
-        {lastWords && lastWords.length > 0 && (
-          <div className="flex flex-col gap-4">
-            {lastWords.map(meaning => (
-              <Expression key={meaning._id} meaning={meaning} />
-            ))}
-          </div>
-        )}
-      </Layout>
-    </>
-  )
-}
-
-export async function getStaticProps() {
-  const lastWords = await backendCDN.fetch(groq`
+const getWords = async (offset = 0) => {
+  const results = await backendCDN.fetch(groq`
     *[
-  _type == "meaning"
-] | order(_createdAt) [0..4] {
+      _type == "meaning"
+    ] | order(_createdAt) [$offset..$pages] {
       _id,
       signifier,
       "meaning": signified->signifier,
@@ -46,10 +30,72 @@ export async function getStaticProps() {
         countries[] {country, locality},
       }
     }
+  `, {pages: offset + pages, offset})
+  return results
+}
+
+const Home = ({lastWords, wordsCount}) => {
+  const [words, setWords] = useState(lastWords);
+  const [pageCount] = useState(Math.ceil(wordsCount / pages));
+  const [itemOffset, setItemOffset] = useState(0);
+
+  useEffect(() => {
+    if (itemOffset == 0) {
+      setWords(lastWords)
+    } else {
+      (async () => {
+        const newWords = await getWords(itemOffset + 1)
+        setWords(newWords)
+      })()
+    }
+  }, [itemOffset]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [words]);
+
+  const handlePageClick = event => {
+    const newOffset = (event.selected * pages) % wordsCount
+    setItemOffset(newOffset)
+  }
+
+  return (
+    <>
+      <Head>
+        <title>Aqui Decimos</title>
+      </Head>
+
+      <Layout>
+        {lastWords && lastWords.length > 0 && (
+          <div className="flex flex-col gap-4">
+            {words.map(meaning => (
+              <Expression key={meaning._id} meaning={meaning} />
+            ))}
+            <ReactPaginate
+              breakLabel="..."
+              nextLabel="next >"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="< previous"
+              renderOnZeroPageCount={null}
+            />
+          </div>
+        )}
+      </Layout>
+    </>
+  )
+}
+
+export async function getStaticProps() {
+  const lastWords = await getWords()
+  const wordsCount = await backendCDN.fetch(groq`
+    count(*[_type == "meaning"])
   `)
   return {
     props: {
-      lastWords
+      lastWords,
+      wordsCount
     }
   }
 }

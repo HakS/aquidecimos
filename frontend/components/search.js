@@ -1,7 +1,7 @@
 import groq from 'groq';
 import Link from 'next/link';
 import { useCallback, useRef, useState, useEffect } from 'react';
-import { backendCDN, backendCDN_RxJS, backend_RxJS } from '../client';
+import { backend_RxJS } from '../client';
 import { useRouter } from 'next/router';
 
 let searchReq = null

@@ -1,8 +1,10 @@
 import groq from 'groq';
 import Link from 'next/link';
 import { useCallback, useRef, useState, useEffect } from 'react';
-import { backendCDN } from '../client';
+import { backendCDN, backendCDN_RxJS, backend_RxJS } from '../client';
 import { useRouter } from 'next/router';
+
+let searchReq = null
 
 const Search = () => {
   const searchRef = useRef(null)
@@ -12,24 +14,42 @@ const Search = () => {
   const router = useRouter()
 
   useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, []);
+
+  useEffect(() => {
     if (active) {
       setActive(false)
     }
   }, [router.asPath])
 
-  const fetchResults = async query => {
-    const result = await backendCDN.fetch(
-      groq`*[_type in ["meaning", "signified"] && signifier match $query] {
-        signifier,
-        _type
-      }`,
-      { query: `${query}*` }
-    )
+  const escFunction = useCallback((event) => {
+    if (event.key === "Escape") {
+      searchRef.current.querySelector('input').blur()
+      setActive(false)
+    }
+  }, []);
 
-    setResults(result.map(({_type, signifier}) => ({
-      word: signifier,
-      link: `/${ _type == 'meaning' ? 'expresion' : 'concepto' }/${ signifier }`
-    })))
+  const fetchResults = async query => {
+    const q = groq`*[_type in ["meaning", "signified"] && signifier match $query] {
+      signifier,
+      _type
+    }`
+    if (searchReq != null) {
+      searchReq.unsubscribe()
+    }
+    searchReq = backend_RxJS.fetch(q, { query: `${query}*` }).subscribe({
+      next: result => {
+        setResults(result.map(({_type, signifier}) => ({
+          word: signifier,
+          link: `/${ _type == 'meaning' ? 'expresion' : 'concepto' }/${ signifier }`
+        })))
+      }
+    })
   }
 
   const onChange = useCallback(event => {
@@ -63,7 +83,7 @@ const Search = () => {
       className="p-3 grow shrink-0"
       placeholder="Escribe cualquier palabra aquí..." />
       { active && results.length > 0 && (
-        <ul className="absolute top-full w-full bg-white border border-slate-200">
+        <ul className="absolute top-full w-full bg-white border border-slate-200 z-10">
           { results.map(result => (
             <li key={ result.word }>
               <Link href={result.link} passHref={true}>

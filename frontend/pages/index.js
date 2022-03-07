@@ -35,10 +35,13 @@ const getWords = async (offset = 0) => {
   return results
 }
 
-const Pager = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
+const DefinedPager = ({className, children}) => (
+  <div className={`${className} shadow-lg bg-white flex justify-center my-4`}>
+    {children}
+  </div>
+)
+
+const Pager = styled(DefinedPager)`
   ul {
     display: flex;
   }
@@ -49,7 +52,7 @@ const Pager = styled.div`
     }
     a {
       display: block;
-      padding: .6rem .8rem;
+      padding: .55rem .95rem;
       cursor: pointer;
       &:hover {
         background-color: #e7ebee;
@@ -75,7 +78,7 @@ const Home = ({lastWords, wordsCount}) => {
   }, [itemOffset]);
 
   useEffect(() => {
-    // window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [words]);
 
   const handlePageClick = event => {
@@ -95,17 +98,19 @@ const Home = ({lastWords, wordsCount}) => {
             {words.map(meaning => (
               <Expression key={meaning._id} meaning={meaning} />
             ))}
-            <Pager>
-              <ReactPaginate
-                breakLabel="..."
-                nextLabel="next >"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={2}
-                pageCount={pageCount}
-                previousLabel="< previous"
-                renderOnZeroPageCount={null}
-              />
-            </Pager>
+            <div className='flex justify-center'>
+              <Pager>
+                <ReactPaginate
+                  breakLabel="..."
+                  nextLabel=">"
+                  onPageChange={handlePageClick}
+                  pageRangeDisplayed={2}
+                  pageCount={pageCount}
+                  previousLabel="<"
+                  renderOnZeroPageCount={null}
+                />
+              </Pager>
+            </div>
           </div>
         )}
       </Layout>

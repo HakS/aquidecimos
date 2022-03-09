@@ -14,7 +14,7 @@ const PortableTextStyles = styled.div`
 
 const Expression = ({meaning}) => {
   return (
-    <article className="border bg-white shadow-lg">
+    <article className="border bg-white">
       <div className="p-3">
         <div className="flex justify-between mb-2 flex-wrap">
           <div className="flex gap-2 items-center">

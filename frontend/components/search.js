@@ -22,8 +22,22 @@ const fetchResults = async query => {
   })
 }
 
-const SearchResultsList = React.memo(({word, results}) => {
-  console.log(`CALLED! word: ${word}`)
+const SearchResultsList = React.memo(({word}) => {
+  const [results, setResults] = useState([])
+
+  useEffect(() => {
+    if (word.length) {
+      fetchResults(word).then(finding => {
+        setResults(finding.map( ({_type, signifier}) => ({
+          word: signifier,
+          link: `/${ _type == 'meaning' ? 'expresion' : 'concepto' }/${ signifier }`
+        })))
+      })
+    } else {
+      setResults([])
+    }
+  }, [word])
+
   return (
     <ul className="absolute top-full w-full bg-white border border-slate-200 z-10 shadow-lg">
       { results.map(result => (
@@ -36,6 +50,7 @@ const SearchResultsList = React.memo(({word, results}) => {
     </ul>
   )
 }, (prev, next) => {
+  console.log(prev.word, next.word)
   return prev.word === next.word
 })
 
@@ -43,7 +58,6 @@ const Search = () => {
   const searchRef = useRef(null)
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(false)
-  const [results, setResults] = useState([])
   const router = useRouter()
 
   useEffect(() => {
@@ -68,18 +82,7 @@ const Search = () => {
 
   const onChange = useCallback(event => {
     const query = event.target.value
-    if (query.length) {
-      fetchResults(query).then(result => {
-        setResults(result.map( ({_type, signifier}) => ({
-          word: signifier,
-          link: `/${ _type == 'meaning' ? 'expresion' : 'concepto' }/${ signifier }`
-        })))
-        setQuery(query)
-      })
-    } else {
-      setResults([])
-      setQuery(query)
-    }
+    setQuery(query)
   })
 
   const onFocus = () => {
@@ -100,10 +103,10 @@ const Search = () => {
       onChange={onChange}
       onFocus={onFocus}
       value={query}
-      className="p-3 grow shrink-0"
+      className="p-3 grow shrink-0 border"
       placeholder="Escribe cualquier palabra aquí..." />
-      { active && results.length > 0 && (
-        <SearchResultsList word={query} results={results} />
+      { active && (
+        <SearchResultsList word={query} />
       )}
     </div>
   )

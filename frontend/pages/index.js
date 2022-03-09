@@ -36,7 +36,7 @@ const getWords = async (offset = 0) => {
 }
 
 const DefinedPager = ({className, children}) => (
-  <div className={`${className} shadow-lg bg-white flex justify-center my-4`}>
+  <div className={`${className} bg-white flex justify-center my-4`}>
     {children}
   </div>
 )

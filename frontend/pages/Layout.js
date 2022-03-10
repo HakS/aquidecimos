@@ -26,26 +26,28 @@ export default (props) => {
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
-      <header className="bg-white py-6">
-        <div className="max-w-screen-lg mx-auto px-4 ">
-          <Link href="/" passHref={true}>
-            <a className="mb-3 inline-block">
-              <Image src="/logo.png" width={250} height={48} />
-            </a>
-          </Link>
-          <div className="flex w-full">
-            <Search />
+      <div className="flex flex-col min-h-screen">
+        <header className="bg-white py-6">
+          <div className="max-w-screen-lg mx-auto px-4 ">
+            <Link href="/" passHref={true}>
+              <a className="mb-0 inline-flex">
+                <Image src="/logo.png" width={296} height={80} />
+              </a>
+            </Link>
+            <div className="flex w-full">
+              <Search />
+            </div>
           </div>
-        </div>
-      </header>
-      <div className="bg-slate-100 pt-3 overflow-hidden">
-        <div className="max-w-screen-lg mx-auto flex flex-wrap px-4 my-10">
-          <main className="w-full md:w-8/12 md:pr-4">
-            { props.children }
-          </main>
-          <aside className="w-full md:w-4/12 text-slate-400 text-sm text-center">
-            Aqui Decimos, { new Date().getFullYear() } todos los derechos reservados.
-          </aside>
+        </header>
+        <div className="bg-slate-100 pt-3 overflow-hidden grow">
+          <div className="max-w-screen-lg mx-auto flex flex-wrap px-4 my-10">
+            <main className="w-full md:w-8/12 md:pr-4">
+              { props.children }
+            </main>
+            <aside className="w-full md:w-4/12 text-slate-400 text-sm text-center">
+              Aqui Decimos, { new Date().getFullYear() } todos los derechos reservados.
+            </aside>
+          </div>
         </div>
       </div>
     </>

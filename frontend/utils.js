@@ -51,3 +51,7 @@ export const RelatedLink = styled.a`
     flex-basis: calc(50% - 0.75rem);
   }
 `
+
+const currentDomain = 'https://aquidecimos.vercel.app'
+
+export const getAbsUrl = (router) => `${currentDomain}${router ? (router.asPath === "/" ? "": router.asPath) : ''}`.split('?')[0]

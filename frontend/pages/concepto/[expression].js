@@ -2,24 +2,19 @@ import Layout from "../Layout"
 import { backendCDN } from '../../client';
 import groq from "groq";
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from 'react-share';
 import Flags from '../../components/flags';
 import wordTypes from "../../wordTypes";
 import Link from 'next/link';
-import { RelatedLink } from "../../utils";
+import { getAbsUrl, RelatedLink } from "../../utils";
 
 const WordConcept = ({wordDef}) => {
   const router = useRouter()
-  const [absUrl, setAbsUrl] = useState('')
+  const absUrl = getAbsUrl(router)
 
   const tagTitle = router.query.expression
   const tagDescription = wordDef != undefined ? wordDef.definition : null
-
-  useEffect(() => {
-    setAbsUrl(window.location.protocol + "//" + window.location.host  + window.location.pathname)
-  })
   return (
     <>
       <Head>
@@ -27,12 +22,13 @@ const WordConcept = ({wordDef}) => {
         <meta name="description" content={tagDescription} />
         <meta itemProp="name" content={tagTitle} />
         <meta itemProp="description" content={tagDescription} />
-        <meta name="og:title" content={tagTitle} />
-        <meta name="og:description" content={tagDescription} />
-        <meta name="og:type" content="article" />
-        <meta name="og:url" content={useRouter().asPath} />
+        <meta property="og:title" content={tagTitle} />
+        <meta property="og:description" content={tagDescription} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={absUrl} />
         <meta name="twitter:title" content={tagTitle} />
         <meta name="twitter:description" content={tagDescription} />
+        <meta name="twitter:card" content="summary" />
         <link rel="canonical" href={absUrl} />
       </Head>
       <Layout>

@@ -4,21 +4,16 @@ import Head from 'next/head';
 import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } from 'react-share'
 import { backendCDN } from '../../client'
 import Layout from '../Layout'
-import { removeLastDot, truncate } from '../../utils';
-import { useEffect, useState } from 'react';
+import { removeLastDot, truncate, getAbsUrl } from '../../utils';
 import Expression from '../../components/expression';
 
 const SlangData = ({slangMeaning}) => {
   const router = useRouter()
-  const [absUrl, setAbsUrl] = useState('')
+  const absUrl = getAbsUrl(router)
 
   const tagTitle = slangMeaning != undefined && slangMeaning.length > 0 ? `"${router.query.expression}" significa...` : null
   const tagDescription = slangMeaning != undefined && slangMeaning.length > 0 ?
     `${slangMeaning.map(meaning => `${meaning.meaning}: ${truncate(removeLastDot(meaning.definition), 90)}`).join(', ')}` : null
-
-  useEffect(() => {
-    setAbsUrl(window.location.protocol + "//" + window.location.host  + window.location.pathname)
-  })
 
   return (
     <>
@@ -27,12 +22,13 @@ const SlangData = ({slangMeaning}) => {
         <meta name="description" content={tagDescription} />
         <meta itemProp="name" content={tagTitle} />
         <meta itemProp="description" content={tagDescription} />
-        <meta name="og:title" content={tagTitle} />
-        <meta name="og:description" content={tagDescription} />
-        <meta name="og:type" content="article" />
-        <meta name="og:url" content={useRouter().asPath} />
+        <meta property="og:title" content={tagTitle} />
+        <meta property="og:description" content={tagDescription} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={absUrl} />
         <meta name="twitter:title" content={tagTitle} />
         <meta name="twitter:description" content={tagDescription} />
+        <meta name="twitter:card" content="summary" />
         <link rel="canonical" href={absUrl} />
       </Head>
       <Layout>
@@ -77,8 +73,7 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps(context) {
-  const { params } = context;
+export async function getStaticProps({ params}) {
   const { expression = "" } = params
   const slangMeaning = await backendCDN.fetch(groq`
     *[

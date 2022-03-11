@@ -25,6 +25,7 @@ export default (props) => {
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
         <meta name="theme-color" content="#ffffff" />
+        <meta property="og:site_name" content="Aqui Decimos"></meta>
       </Head>
       <div className="flex flex-col min-h-screen">
         <header className="bg-white py-6">

@@ -55,3 +55,15 @@ export const RelatedLink = styled.a`
 const currentDomain = 'https://aquidecimos.vercel.app'
 
 export const getAbsUrl = (router) => `${currentDomain}${router ? (router.asPath === "/" ? "": router.asPath) : ''}`.split('?')[0]
+
+// log the pageview with their URL
+export const gtagPageView = (url) => {
+  window.gtag('config', process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS, {
+    page_path: url,
+  })
+}
+
+// log specific events happening.
+export const gtagEvent = ({ action, params }) => {
+  window.gtag('event', action, params)
+}

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { backend_RxJS } from '../client';
 import { useRouter } from 'next/router';
+import { gtagEvent } from '../utils';
 
 let searchSubscriber = null
 
@@ -27,6 +28,12 @@ const SearchResultsList = React.memo(({word}) => {
 
   useEffect(() => {
     if (word.length) {
+      gtagEvent({
+        action: 'search',
+        params: {
+          search_term: word
+        }
+      })
       fetchResults(word).then(finding => {
         setResults(finding.map( ({_type, signifier}) => ({
           word: signifier,

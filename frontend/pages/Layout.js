@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { gtagPageView } from '../utils';
 
 export default (props) => {
   const router = useRouter()

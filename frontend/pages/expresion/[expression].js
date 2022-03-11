@@ -1,11 +1,11 @@
 import groq from 'groq'
 import { useRouter } from 'next/router'
 import Head from 'next/head';
-import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } from 'react-share'
 import { backendCDN } from '../../client'
 import Layout from '../Layout'
 import { removeLastDot, truncate, getAbsUrl } from '../../utils';
 import Expression from '../../components/expression';
+import Share from '../../components/share';
 
 const SlangData = ({slangMeaning}) => {
   const router = useRouter()
@@ -37,12 +37,7 @@ const SlangData = ({slangMeaning}) => {
             <div className="flex justify-between">
               <h1 className="font-bold text-xl">"{ router.query.expression }" significa</h1>
               <div className="flex gap-3">
-                <FacebookShareButton url={absUrl}>
-                  <FacebookIcon size={24} round={true}></FacebookIcon>
-                </FacebookShareButton>
-                <TwitterShareButton url={absUrl}>
-                  <TwitterIcon size={24} round={true}></TwitterIcon>
-                </TwitterShareButton>
+                <Share absUrl={absUrl} />
               </div>
             </div>
             {slangMeaning.map(meaning => (

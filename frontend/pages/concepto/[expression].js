@@ -3,11 +3,11 @@ import { backendCDN } from '../../client';
 import groq from "groq";
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from 'react-share';
 import Flags from '../../components/flags';
 import wordTypes from "../../wordTypes";
 import Link from 'next/link';
 import { getAbsUrl, RelatedLink } from "../../utils";
+import Share from "../../components/share";
 
 const WordConcept = ({wordDef}) => {
   const router = useRouter()
@@ -44,12 +44,7 @@ const WordConcept = ({wordDef}) => {
                       <div className="bg-blue-700 text-sm text-white px-2 rounded-xl">{ wordTypes[wordDef.type] }</div>
                     </div>
                     <div className="flex gap-3">
-                      <FacebookShareButton url={absUrl}>
-                        <FacebookIcon size={24} round={true}></FacebookIcon>
-                      </FacebookShareButton>
-                      <TwitterShareButton url={absUrl}>
-                        <TwitterIcon size={24} round={true}></TwitterIcon>
-                      </TwitterShareButton>
+                      <Share absUrl={absUrl} />
                     </div>
                   </div>
                 </div>

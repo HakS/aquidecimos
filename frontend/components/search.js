@@ -57,7 +57,6 @@ const SearchResultsList = React.memo(({word}) => {
     </ul>
   )
 }, (prev, next) => {
-  console.log(prev.word, next.word)
   return prev.word === next.word
 })
 

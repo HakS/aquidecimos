@@ -1,30 +1,27 @@
-import groq from 'groq';
 import Link from 'next/link';
 import React, { useCallback, useRef, useState, useEffect } from 'react';
-import { backend_RxJS } from '../client';
 import { useRouter } from 'next/router';
 import { gtagEvent } from '../utils';
 
-let searchSubscriber = null
-
-const fetchResults = async query => {
-  const q = groq`*[_type in ["meaning", "signified"] && signifier match $query] {
-    signifier,
-    _type
-  }`
-  if (searchSubscriber != null) {
-    searchSubscriber.unsubscribe()
-  }
-  return new Promise((res, rej) => {
-    searchSubscriber = backend_RxJS.fetch(q, { query: `${query}*` }).subscribe({
-      next: result => res(result),
-      error: err => rej(err)
-    })
-  })
-}
-
 const SearchResultsList = React.memo(({word}) => {
   const [results, setResults] = useState([])
+  const searchController = useRef(new AbortController())
+  const search = useCallback(async (query) => {
+    searchController.current.abort()
+    searchController.current = new AbortController()
+    const { signal } = searchController.current
+    try {
+      const response = await fetch(
+        `/api/search?query=${query}`,
+        { signal }
+      )
+      return await response.json()
+    } catch (e) {
+      if (e.name == "AbortError") {
+        return []
+      } else throw e
+    }
+  }, [])
 
   useEffect(() => {
     if (word.length) {
@@ -34,7 +31,7 @@ const SearchResultsList = React.memo(({word}) => {
           search_term: word
         }
       })
-      fetchResults(word).then(finding => {
+      search(word).then(finding => {
         setResults(finding.map( ({_type, signifier}) => ({
           word: signifier,
           link: `/${ _type == 'meaning' ? 'expresion' : 'concepto' }/${ signifier }`

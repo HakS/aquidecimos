@@ -1,27 +1,15 @@
 import sanityClient from '@sanity/client'
 
-const apiVersion = '2021-10-21'
-const projectId = 'x93jjbcj'
-const dataset = 'production'
+const apiVersion = process.env.SANITY_IO_API_VERSION
+const projectId = process.env.SANITY_IO_PROJECT_ID
+const dataset = process.env.SANITY_IO_DATASET
 
 export const backendCDN = sanityClient({
   apiVersion, projectId, dataset,
   useCdn: true
 })
 
-export const backendCDN_RxJS = sanityClient({
-  apiVersion, projectId, dataset,
-  useCdn: true,
-  isPromiseAPI: false
-})
-
 export const backend = sanityClient({
   apiVersion, projectId, dataset,
   useCdn: false
-})
-
-export const backend_RxJS = sanityClient({
-  apiVersion, projectId, dataset,
-  useCdn: false,
-  isPromiseAPI: false
 })

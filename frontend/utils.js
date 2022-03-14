@@ -52,7 +52,7 @@ export const RelatedLink = styled.a`
   }
 `
 
-const currentDomain = 'https://aquidecimos.vercel.app'
+export const currentDomain = process.env.URL
 
 export const getAbsUrl = (router) => `${currentDomain}${router ? (router.asPath === "/" ? "": router.asPath) : ''}`.split('?')[0]
 
@@ -66,4 +66,27 @@ export const gtagPageView = (url) => {
 // log specific events happening.
 export const gtagEvent = ({ action, params }) => {
   window.gtag('event', action, params)
+}
+
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
+export function initMiddleware(middleware) {
+  return (req, res) =>
+    new Promise((resolve, reject) => {
+      middleware(req, res, (result) => {
+        if (result instanceof Error) {
+          return reject(result)
+        }
+        return resolve(result)
+      })
+    })
+}
+
+export function urlQuerySerialize(obj) {
+  const str = [];
+  for (var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
 }

@@ -1,41 +1,12 @@
 import Head from 'next/head'
 import Layout from './Layout'
-import { backendCDN } from '../client'
-import groq from 'groq'
 import Expression from '../components/expression'
 import ReactPaginate from 'react-paginate'
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { getAbsUrl } from '../utils'
-
-const pages = 5;
-
-const getWords = async (offset = 0) => {
-  const results = await backendCDN.fetch(groq`
-    *[
-      _type == "meaning"
-    ] | order(_createdAt) [$offset..$pages] {
-      _id,
-      signifier,
-      "meaning": signified->signifier,
-      "definition": signified->definition,
-      "type": signified->type,
-      examples,
-      countries[] {country, locality},
-      "related": *[
-        _type == "meaning" &&
-        signified._ref == ^.signified._ref &&
-        _id != ^._id
-      ] {
-        _id,
-        signifier,
-        countries[] {country, locality},
-      }
-    }
-  `, {pages: offset + pages, offset})
-  return results
-}
+import { getCount, getWords, itemsPerPage } from '../service';
 
 const DefinedPager = ({className, children}) => (
   <div className={`${className} bg-white flex justify-center my-4`}>
@@ -65,7 +36,7 @@ const Pager = styled(DefinedPager)`
 
 const Home = ({lastWords, wordsCount}) => {
   const [words, setWords] = useState(lastWords);
-  const [pageCount] = useState(Math.ceil(wordsCount / pages));
+  const [pageCount] = useState(Math.ceil(wordsCount / itemsPerPage));
   const [itemOffset, setItemOffset] = useState(0);
   const router = useRouter()
   const absUrl = getAbsUrl(router)
@@ -86,7 +57,7 @@ const Home = ({lastWords, wordsCount}) => {
   }, [words]);
 
   const handlePageClick = event => {
-    const newOffset = (event.selected * pages) % wordsCount
+    const newOffset = (event.selected * itemsPerPage) % wordsCount
     setItemOffset(newOffset)
   }
 
@@ -140,11 +111,9 @@ const Home = ({lastWords, wordsCount}) => {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const lastWords = await getWords()
-  const wordsCount = await backendCDN.fetch(groq`
-    count(*[_type == "meaning"])
-  `)
+  const wordsCount = await getCount()
   return {
     props: {
       lastWords,

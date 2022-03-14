@@ -52,7 +52,7 @@ export const RelatedLink = styled.a`
   }
 `
 
-export const currentDomain = process.env.URL
+export const currentDomain = process.env.URL || ''
 
 export const getAbsUrl = (router) => `${currentDomain}${router ? (router.asPath === "/" ? "": router.asPath) : ''}`.split('?')[0]
 

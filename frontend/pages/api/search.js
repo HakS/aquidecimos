@@ -10,11 +10,6 @@ const cors = initMiddleware(
   })
 )
 
-const q = groq`*[_type in ["meaning", "signified"] && signifier match $query] {
-  signifier,
-  _type
-}`
-
 export default async function handler(req, res) {
   await cors(req, res)
 

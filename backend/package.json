@@ -1,0 +1,21 @@
+{
+  "name": "ad_backend",
+  "version": "1.0.0",
+  "description": "A synonym dictionary for Latinamerican slang",
+  "main": "index.js",
+  "author": "Juan Barba",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "mongodb": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

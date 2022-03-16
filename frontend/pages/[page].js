@@ -1,4 +1,4 @@
-import { getCount, getWords } from '../service';
+import { getCount, getWords, itemsPerPage } from '../service';
 import Latest from './latest'
 
 
@@ -8,8 +8,8 @@ const Home = ({lastWords, wordsCount}) => {
   )
 }
 
-export async function getServerSideProps() {
-  const lastWords = await getWords()
+export async function getServerSideProps({params: {page}}) {
+  const lastWords = await getWords((parseInt(page) - 1) * itemsPerPage)
   const wordsCount = await getCount()
   return {
     props: {

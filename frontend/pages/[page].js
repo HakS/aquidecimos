@@ -9,7 +9,29 @@ const Home = ({lastWords, wordsCount}) => {
 }
 
 export async function getServerSideProps({params: {page}}) {
-  const lastWords = await getWords((parseInt(page) - 1) * itemsPerPage)
+  if (isNaN(page + 1)) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const currentPage = parseInt(page)
+  if (currentPage <= 1) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  const lastWords = await getWords((currentPage - 1) * itemsPerPage)
+  if (lastWords.length <= 0) {
+    return {
+      notFound: true,
+    }
+  }
+
   const wordsCount = await getCount()
   return {
     props: {

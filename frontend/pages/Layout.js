@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { gtagPageView } from '../utils';
 import Script from 'next/script';
+import { FaFacebook, FaInstagram } from 'react-icons/fa';
 
 export default (props) => {
   const router = useRouter()
@@ -61,9 +62,23 @@ export default (props) => {
             <main className="w-full md:w-8/12 md:pr-4">
               { props.children }
             </main>
-            <aside className="w-full md:w-4/12 text-slate-400 text-sm text-center">
-              Aqui Decimos, { new Date().getFullYear() } todos los derechos reservados.
-            </aside>
+            <div className="w-full md:w-4/12 text-slate-400 text-sm text-center">
+              <aside>
+                <div className="flex gap-3 w-full justify-center mb-3">
+                  <a className="w-50 flex justify-center gap-2 items-center" href="https://www.facebook.com/aqui.decimos.diccionario" target="_blank">
+                    <FaFacebook className="text-lg" />
+                    Facebook
+                  </a>
+                  <a className="w-50 flex justify-center gap-2 items-center" href="https://www.instagram.com/aquidecimos.app/" target="_blank">
+                    <FaInstagram className="text-lg" />
+                    Instagram
+                  </a>
+                </div>
+              </aside>
+              <footer>
+                Aqui Decimos, { new Date().getFullYear() } todos los derechos reservados.
+              </footer>
+            </div>
           </div>
         </div>
       </div>

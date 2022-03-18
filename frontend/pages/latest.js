@@ -59,7 +59,7 @@ const Latest = ({lastWords, wordsCount}) => {
         <meta name="description" content={tagDescription} />
         <meta itemProp="name" content={tagTitle} />
         <meta itemProp="description" content={tagDescription} />
-        <meta itemprop="image" content={tagImage}></meta>
+        <meta itemProp="image" content={tagImage}></meta>
         <meta property="og:title" content={tagTitle} />
         <meta property="og:description" content={tagDescription} />
         <meta property="og:image" content={tagImage} />

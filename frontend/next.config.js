@@ -1,4 +1,7 @@
-module.exports = {
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
   compiler: {
     styledComponents: true,
   },
@@ -6,4 +9,4 @@ module.exports = {
     locales: ["es"],
     defaultLocale: "es",
   },
-};
+}

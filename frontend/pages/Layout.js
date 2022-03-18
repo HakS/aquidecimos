@@ -4,13 +4,42 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { gtagPageView } from '../utils';
+import { gtagEvent, gtagPageView } from '../utils';
 import Script from 'next/script';
 import Modal from 'react-modal'
 import { SiBuymeacoffee } from 'react-icons/si';
 import { FaFacebook, FaInstagram, FaPaypal, FaBitcoin } from 'react-icons/fa';
+import styled from 'styled-components';
 
 Modal.setAppElement('#__next')
+
+const DonateLink = styled.a`
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+
+  &:hover {
+    background-color: rgb(241 245 249);
+  }
+
+  svg {
+    width: 80px;
+    height: 80px;
+  }
+
+  &[data-donate="buymeacoffee"] svg {
+    color: rgb(253 224 71);
+  }
+  &[data-donate="paypal"] svg {
+    color: rgb(14 165 233);
+  }
+  &[data-donate="bitcoin"] svg {
+    color: rgb(251 191 36);
+  }
+`
 
 export default (props) => {
   const [modal, setModal] = useState(false)
@@ -27,6 +56,10 @@ export default (props) => {
   }, [router.events])
 
   const handleDonationClick = () => {
+    gtagEvent({
+      action: 'donate_modal',
+      params: {}
+    })
     setModal(true)
   }
 
@@ -37,20 +70,28 @@ export default (props) => {
         onRequestClose={() => setModal(false)}
         contentLabel="Donar"
       >
-        <h1 className="font-bold text-xl">Donar</h1>
-        <div className="grid gap-3 grid-cols-2 text-center">
-          <a href="https://www.buymeacoffee.com/aquidecimos" target="_blank">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-center">
+          <DonateLink data-donate="buymeacoffee" onClick={() => gtagEvent({
+            action: 'donate_link',
+            params: {platform: "buymeacoffee"}
+          })} href="https://www.buymeacoffee.com/aquidecimos" target="_blank">
             <SiBuymeacoffee />
             Buy me a coffee (Cómprame un café)
-          </a>
-          <a href="https://www.paypal.com/donate/?hosted_button_id=HVRPCFGRZD3WL" target="_blank">
+          </DonateLink>
+          <DonateLink data-donate="paypal" onClick={() => gtagEvent({
+            action: 'donate_link',
+            params: {platform: "paypal"}
+          })} href="https://www.paypal.com/donate/?hosted_button_id=HVRPCFGRZD3WL" target="_blank">
             <FaPaypal />
             PayPal
-          </a>
-          <a href="https://www.blockonomics.co/pay-url/54dff52c5e5a4777" target="_blank">
+          </DonateLink>
+          <DonateLink data-donate="bitcoin" onClick={() => gtagEvent({
+            action: 'donate_link',
+            params: {platform: "bitcoin"}
+          })} href="https://www.blockonomics.co/pay-url/54dff52c5e5a4777" target="_blank">
             <FaBitcoin />
             Bitcoin
-          </a>
+          </DonateLink>
         </div>
       </Modal>
 

@@ -10,3 +10,5 @@ const nextConfig = {
     defaultLocale: "es",
   },
 }
+
+export default nextConfig
